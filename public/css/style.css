@@ -26,3 +26,41 @@ header {
     flex: 0 0 19%;
     border-left: 1px solid #6C6C6C;
 }
+
+.modal-main {
+    display: none;
+}
+
+span {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border: 0px;
+    border-top: solid 4px #FFFFFF;
+    border-right: solid 4px #FFFFFF;
+    transform: rotate(135deg);
+    /* 下向きの場合 */
+}
+
+
+/*trash hover*/
+
+.img_container {
+    width: 70%;
+    height: 70%;
+    position: relative;
+    overflow: hidden;
+}
+
+img:nth-child(2) {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.img_container:hover img:nth-child(2) {
+    opacity: 0;
+    transition: opacity 1s;
+}

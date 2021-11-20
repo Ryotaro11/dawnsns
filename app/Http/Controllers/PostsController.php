@@ -22,4 +22,28 @@ class PostsController extends Controller
         ]);
         return redirect('/top');
     }
+    public function delete($id) //削除処理だけを行うページ
+    {
+        DB::table('posts')
+            ->where('id', $id)
+            ->delete();
+        return redirect('/top');
+    }
+    public function update(Request $request)
+    {
+        $id = $request->input('id');
+        $up_post = $request->input('upPost');
+        DB::table('posts')
+            ->where('id', $id)
+            ->update(
+                ['posts' => $up_post]
+            );
+
+        return redirect('/top');
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
 }
