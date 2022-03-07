@@ -49,12 +49,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|min:4|max:255',
             'mail' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:4|confirmed',
         ]);
     }
-
     /**
      * Create a new user instance after a valid registration.
      *
@@ -78,14 +77,33 @@ class RegisterController extends Controller
     public function register(Request $request){
         if($request->isMethod('post')){
             $data = $request->input();
-
+            $validator = Validator::make($request->all(), ['username' => 'required|string|min:4|max:12',
+            'mail' => 'required|string|email|min:4|max:20|unique:users',
+            'password' => 'required|string|min:4|max:12|unique:users|confirmed'
+            ],[
+                'username.required'=>'ユーザー名は必須項目です！',
+                'mail.required'=>'メールアドレスは必須項目です！',
+                'password.required'=>'パスワードは必須項目です！',
+                'mail.unique'=>'このメールアドレスは使用済み',
+                'password.unique'=>'このパスワードは使用済み'
+            ]);
+            // 記述方法：Validator::make('値の配列', '検証ルールの配列');
+        if ($validator->fails()) {
+                return redirect('/register')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
             $this->create($data);
             return redirect('added');
-        }
+        }}
         return view('auth.register');
     }
 
     public function added(){
-        return view('auth.added');
+        $username = \DB::table('users')
+        ->latest()
+        ->first();
+        return view('auth.added',['username'=>$username]);
+        // authフォルダの中にあるadded.bladeへ'username'($username)という変数名で$usernameを渡すことができる
     }
 }
